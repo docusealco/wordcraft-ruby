@@ -1,0 +1,4 @@
+[toolchain]
+# WordCraft needs Rust 1.95 or newer.
+channel = "1.98.0"
+profile = "minimal"

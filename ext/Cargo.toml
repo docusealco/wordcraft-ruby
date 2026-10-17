@@ -1,0 +1,31 @@
+[package]
+name = "wordcraft_ffi"
+version = "0.7.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "C ABI shim over WordCraft for the wordcraft Ruby gem: DOCX bytes in, PDF bytes out"
+
+[lib]
+name = "wordcraft"
+crate-type = ["cdylib"]
+
+# WordCraft (https://github.com/storytold/wordcraft). The engine's open/save path is the one the
+# WordCraft app and CLI use: embedded fonts, DATE field refresh, encrypted and mislabelled files.
+# Keep the rev in step with WORDCRAFT_REV in lib/wordcraft/version.rb.
+[dependencies]
+wordcraft-engine = { git = "https://github.com/storytold/wordcraft", rev = "eae242176108d328c5dd81fbc10370c51ab90706" }
+wordcraft-fonts = { git = "https://github.com/storytold/wordcraft", rev = "eae242176108d328c5dd81fbc10370c51ab90706" }
+
+# Mirrors WordCraft's workspace patch: its PDF writer (craft-pdf) needs this krilla fork, and a
+# [patch] only applies in the top-level workspace being built, so WordCraft's own doesn't reach here.
+[patch.crates-io]
+krilla = { git = "https://github.com/storytold/craft-libs", rev = "c3487320b2d1de657b860b3c8abb44e1f2b32bd8" }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+debug = 0
+# panic = "unwind" (the default): the shim catches panics so none reaches the host process.
+
+[workspace]

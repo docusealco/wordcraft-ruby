@@ -1,0 +1,26 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    ca-certificates \
+    binutils && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH=/root/.cargo/bin:$PATH
+
+RUN curl -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain none
+
+WORKDIR /workspace/ext
+
+COPY ext/ ./
+
+RUN cargo build --release --locked && \
+    mkdir -p /out && \
+    cp target/release/libwordcraft.so /out/libwordcraft.so && \
+    strip --strip-unneeded /out/libwordcraft.so
+
+CMD ["ls", "-l", "/out"]

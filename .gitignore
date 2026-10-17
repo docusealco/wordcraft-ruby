@@ -1,0 +1,11 @@
+*.gem
+.bundle
+Gemfile.lock
+tmp/
+pkg/
+build/
+lib/wordcraft/arm64-darwin/
+lib/wordcraft/aarch64-linux/
+lib/wordcraft/x86_64-linux/
+lib/wordcraft/aarch64-linux-musl/
+lib/wordcraft/x86_64-linux-musl/
