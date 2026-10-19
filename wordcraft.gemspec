@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.version = WordCraft::VERSION
   spec.authors = ['Pete Matsyburka']
   spec.email = ['pete@docuseal.com']
-  spec.summary = 'Fast DOCX to PDF conversion in Ruby, powered by WordCraft.'
+  spec.summary = 'Fast DOCX to PDF and page image conversion in Ruby, powered by WordCraft.'
   spec.description = 'Ruby FFI bindings for WordCraft, a pure Rust word processor engine. Ships prebuilt native ' \
                      'libraries for macOS arm64 and Linux (glibc and musl, arm64 and x86_64).'
   spec.license = 'MIT'

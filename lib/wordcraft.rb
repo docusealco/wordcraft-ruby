@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module WordCraft
+  autoload :Document, 'wordcraft/document'
   autoload :Lib, 'wordcraft/lib'
   autoload :VERSION, 'wordcraft/version'
   autoload :WORDCRAFT_REV, 'wordcraft/version'
@@ -10,14 +11,22 @@ module WordCraft
 
   module_function
 
-  def convert(docx, markup: false)
-    Lib.convert(docx, markup:)
+  def open(path, markup: false, &)
+    raise ArgumentError, 'expected a file path, got bytes; use WordCraft.open_buffer' if path.to_s.include?("\0")
+
+    open_buffer(File.binread(path), markup:, &)
   end
 
-  def convert_file(input_path, output_path, markup: false)
-    File.binwrite(output_path, convert(File.binread(input_path), markup:))
+  def open_buffer(input, markup: false)
+    document = Document.new(input, markup:)
 
-    output_path
+    return document unless block_given?
+
+    begin
+      yield document
+    ensure
+      document.close
+    end
   end
 
   def add_font(bytes)
